@@ -19,6 +19,16 @@
       "model":"Nexus 5",
       "manufacturer":"LGE",
       "default": true
+    },
+    {
+      "coefficient1": 3.88790809,
+      "coefficient2": 0.09266519,
+      "coefficient3": 15.55721131,
+      "version":"4.4.2",
+      "build_number":"KOT49H",
+      "model":"SM-T535",
+      "manufacturer":"SAMSUNG"
     }
+
   ]
 }
