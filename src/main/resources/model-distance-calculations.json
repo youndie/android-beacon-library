@@ -20,14 +20,15 @@
       "manufacturer":"LGE",
       "default": true
     },
+
     {
-      "coefficient1": 3.88790809,
-      "coefficient2": 0.09266519,
-      "coefficient3": 15.55721131,
+      "coefficient1":  1.516666,
+      "coefficient2": 7.561714,
+      "coefficient3":  1.109519,
       "version":"4.4.2",
-      "build_number":"KOT49H",
+      "build_number":"KOT49H.T535XXU1ANK1",
       "model":"SM-T535",
-      "manufacturer":"SAMSUNG"
+      "manufacturer":"Samsung"
     }
 
   ]
