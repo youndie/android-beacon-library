@@ -207,7 +207,6 @@ public abstract class CycledLeScanner {
         } else {
             BeaconManager.logDebug(TAG, "disabling scan");
             mScanning = false;
-
             stopScan();
             mLastScanCycleEndTime = new Date().getTime();
         }

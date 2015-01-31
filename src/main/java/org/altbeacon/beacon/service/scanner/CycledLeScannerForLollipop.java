@@ -9,6 +9,7 @@ import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.util.Log;
+
 import org.altbeacon.beacon.BeaconParser;
 
 import org.altbeacon.beacon.BeaconManager;
@@ -37,9 +38,9 @@ public class CycledLeScannerForLollipop extends CycledLeScanner {
     @Override
     protected void stopScan() {
         try {
-            mScanner.stopScan(getNewLeScanCallback());
-        }
-        catch (Exception e) {
+            if (mScanner != null)
+                mScanner.stopScan(getNewLeScanCallback());
+        } catch (Exception e) {
             Log.w("Internal Android exception scanning for beacons: ", e);
         }
     }
@@ -94,13 +95,12 @@ public class CycledLeScannerForLollipop extends CycledLeScanner {
                         // On Android L, between scan cycles do a scan with a filter looking for any beacon
                         // if we see one of those beacons, we need to deliver the results
                         ScanSettings settings = (new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)).build();
-
-                        mScanner.startScan(new ScanFilterUtils().createScanFiltersForBeaconParsers(mBeaconManager.getBeaconParsers()), settings,
-                                (android.bluetooth.le.ScanCallback) getNewLeScanCallback());
-                    }
-                    else {
-                        BeaconManager.logDebug(TAG, "This is Android L, but we last saw a beacon only "+
-                                secsSinceLastDetection+" ago, so we will not keep scanning in background.");
+                        if (mScanner != null)
+                            mScanner.startScan(new ScanFilterUtils().createScanFiltersForBeaconParsers(mBeaconManager.getBeaconParsers()), settings,
+                                    (android.bluetooth.le.ScanCallback) getNewLeScanCallback());
+                    } else {
+                        BeaconManager.logDebug(TAG, "This is Android L, but we last saw a beacon only " +
+                                secsSinceLastDetection + " ago, so we will not keep scanning in background.");
                     }
                 }
                 if (mBackgroundLScanStartTime > 0l) {
@@ -115,10 +115,11 @@ public class CycledLeScannerForLollipop extends CycledLeScanner {
                             // a beacon in background L scanning mode.  We need to stop scanning
                             // so we do not drain battery
                             BeaconManager.logDebug(TAG, "We've been detecting for a bit.  Stopping Android L background scanning");
-                            mScanner.stopScan((android.bluetooth.le.ScanCallback) getNewLeScanCallback());
+                            if (mScanner != null)
+
+                                mScanner.stopScan((android.bluetooth.le.ScanCallback) getNewLeScanCallback());
                             mBackgroundLScanStartTime = 0l;
-                        }
-                        else {
+                        } else {
                             // report the results up the chain
                             BeaconManager.logDebug(TAG, "Delivering Android L background scanning results");
                             mCycledLeScanCallback.onCycleEnd();
@@ -141,11 +142,12 @@ public class CycledLeScannerForLollipop extends CycledLeScanner {
             }, millisecondsUntilStart > 1000 ? 1000 : millisecondsUntilStart);
             mScanDeferredBefore = true;
             return true;
-        }
-        else {
+        } else {
             if (mBackgroundLScanStartTime > 0l) {
                 BeaconManager.logDebug(TAG, "Stopping Android L background scanning to start full scan");
-                mScanner.stopScan((android.bluetooth.le.ScanCallback) getNewLeScanCallback());
+                if (mScanner != null)
+
+                    mScanner.stopScan((android.bluetooth.le.ScanCallback) getNewLeScanCallback());
                 mBackgroundLScanStartTime = 0;
             }
             mScanDeferredBefore = false;
@@ -171,13 +173,17 @@ public class CycledLeScannerForLollipop extends CycledLeScanner {
             settings = (new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)).build();
 
         }
-        mScanner.startScan(filters, settings, getNewLeScanCallback());
+        if (mScanner != null)
+
+            mScanner.startScan(filters, settings, getNewLeScanCallback());
 
     }
 
     @Override
     protected void finishScan() {
-        mScanner.stopScan(getNewLeScanCallback());
+        if (mScanner != null)
+
+            mScanner.stopScan(getNewLeScanCallback());
         mScanningPaused = true;
     }
 
